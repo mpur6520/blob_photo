@@ -171,7 +171,7 @@ def spawn_new_circles():
     
     
 # Create frame and register event handlers
-frame = simplegui.create_frame("boooo oooo ooo :CC", WIDTH, HEIGHT)
+frame = simplegui.create_frame("Trash Eating", WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(keydown_handler)
 
