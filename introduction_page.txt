@@ -1,0 +1,22 @@
+import simplegui
+
+WIDTH = 500
+HEIGHT = 500
+
+
+intro_text = "This grassy patch has become very polluted. Some microscopic bacterium can get rid of trash! You are now one of them. 
+
+def draw(canvas):
+    canvas.draw_polygon([(50,100),(450,100),(450,400),(50,400)], 3, "White", "Black")
+    canvas.draw_text()
+    
+    
+  
+
+
+
+
+frame = simplegui.create_frame("Trash Eating", WIDTH, HEIGHT)
+frame.set_draw_handler(draw)
+
+frame.start()
