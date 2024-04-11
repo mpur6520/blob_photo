@@ -4,11 +4,13 @@ WIDTH = 500
 HEIGHT = 500
 
 
-intro_text = "This grassy patch has become very polluted. Some microscopic bacterium can get rid of trash! You are now one of them. 
+intro_text = "This grassy patch has become very polluted. Some microscopic bacterium can get rid of trash! You are now one of them. Simulate being an oragnism who cleans up the environment, but see the types of trash some people sadly litter."
+intro_text_2 = "Use the WASD keys to move, and press Z to get rid of the trash!"
+
 
 def draw(canvas):
     canvas.draw_polygon([(50,100),(450,100),(450,400),(50,400)], 3, "White", "Black")
-    canvas.draw_text()
+    canvas.draw_text(intro_text, )
     
     
   
