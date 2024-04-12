@@ -11,6 +11,16 @@ trash_counter = 0
 mastery_levels = ["Dumpster Diner", "Scrap Savant", "Garbage Gourmet", "Junkyard Junkie", "Trash Titan", "Waste Warrior", "Debris Devotee", "Recycling Royalty", "Filth Fiend", "Rummage Ruler", "Litter Legend"]
 mastery_index = 0
 
+intro_text = "This grassy patch has become very polluted."
+intro_text_2 = "Some bacterium can get rid of trash!" 
+intro_text_3 = "You are now one of them." 
+intro_text_4 = "Use WASD to move around."
+intro_text_5 = "Press [Z] to eat trash once you're over it."
+intro_text_6 = "Trash is bad for our environment."
+intro_text_7 = "Don't litter!    [Press [X] to Exit Screen]"
+
+instructions = True 
+
 # trash circles - trash
 trash_circles = [[100, 400], [200, 300], [300, 450], [150, 350], [450, 300]]
 trash_circle_radius = 50
@@ -75,8 +85,8 @@ def calculate_trash_counter():
 
 # Handler to draw everything on the canvas
 def draw(canvas):
-    global message, message_box, message_width, mastery_index, trash_image_index
-        
+    global message, message_box, message_width, mastery_index, trash_image_index, instructions
+    
     # Draw background rectangle
     canvas.draw_image(background_image, ((500 / 2, 500 / 2)), (500, 500), (WIDTH / 2, HEIGHT / 2), (WIDTH, HEIGHT))
     
@@ -117,10 +127,23 @@ def draw(canvas):
     # Draw text message
     canvas.draw_text(message, (WIDTH / 2 - message_width + 50, HEIGHT - 400), 24, "White", "monospace")
    
+    # draw instructions screen
+    if instructions == True:
+        canvas.draw_polygon([(20,50),(480,50),(480,450),(20,450)], 3, "White", "Black")
+        canvas.draw_text(intro_text, (60,130), 20, "White", "monospace")
+        canvas.draw_text(intro_text_2, (60,170), 20, "White", "monospace")
+        canvas.draw_text(intro_text_3, (60,210), 20, "White", "monospace")
+        canvas.draw_text(intro_text_4, (60,250), 20, "White", "monospace")
+        canvas.draw_text(intro_text_5, (60,290), 20, "White", "monospace")
+        canvas.draw_text(intro_text_6, (60,330), 20, "White", "monospace")
+        canvas.draw_text(intro_text_7, (60,370), 20, "White", "monospace")
 
 # Handler for keydown events
 def keydown_handler(key):
-    global player_pos, trash_counter, mastery_index, player_radius, player_image
+    global player_pos, trash_counter, mastery_index, player_radius, player_image, instructions
+    
+    if key == simplegui.KEY_MAP["x"]:  
+        instructions = False
     
     # Move player based on arrow keys
     if key == simplegui.KEY_MAP["w"]:
@@ -139,6 +162,7 @@ def keydown_handler(key):
         player_pos[0] += player_speed
         if player_pos[0] >= 500:
             player_pos[0] = 500
+            
             
     # Check for picking up trash when pressing Z
     if key == simplegui.KEY_MAP["z"]:
