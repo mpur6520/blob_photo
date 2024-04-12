@@ -4,21 +4,41 @@ WIDTH = 500
 HEIGHT = 500
 
 
-intro_text = "This grassy patch has become very polluted. Some microscopic bacterium can get rid of trash! You are now one of them. Simulate being an oragnism who cleans up the environment, but see the types of trash some people sadly litter."
-intro_text_2 = "Use the WASD keys to move, and press Z to get rid of the trash!"
-
+intro_text = "This grassy patch has become very polluted."
+intro_text_2 = "Some bacterium can get rid of trash!" 
+intro_text_3 = "You are now one of them." 
+intro_text_4 = "Use WASD to move around."
+intro_text_5 = "Press [Z] to eat trash once you're over it."
+intro_text_6 = "Trash is bad for our environment."
+intro_text_7 = "Don't litter!       [Click to Exit Screen]"
+instructions = True 
 
 def draw(canvas):
-    canvas.draw_polygon([(50,100),(450,100),(450,400),(50,400)], 3, "White", "Black")
-    canvas.draw_text(intro_text, )
+    global instructions
+    if instructions == True:
+        canvas.draw_polygon([(50,100),(450,100),(450,400),(50,400)], 3, "White", "Black")
+        canvas.draw_text(intro_text, (60,130), 15, "White", "monospace")
+        canvas.draw_text(intro_text_2, (60,170), 15, "White", "monospace")
+        canvas.draw_text(intro_text_3, (60,210), 15, "White", "monospace")
+        canvas.draw_text(intro_text_4, (60,250), 15, "White", "monospace")
+        canvas.draw_text(intro_text_5, (60,290), 15, "White", "monospace")
+        canvas.draw_text(intro_text_6, (60,330), 15, "White", "monospace")
+        canvas.draw_text(intro_text_7, (60,370), 15, "White", "monospace")
+        
     
-    
-  
+def keydown_handler(key):
+    global instructions
+    if key == simplegui.KEY_MAP["x"]:  
+        instructions = False
+        
 
 
 
 
 frame = simplegui.create_frame("Trash Eating", WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
+frame.set_keydown_handler(keydown_handler)
+
+
 
 frame.start()
