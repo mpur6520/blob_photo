@@ -46,8 +46,8 @@ glass_image = simplegui.load_image("https://mpur6520.github.io/game_photos_G4C/g
 trash_images = [water_image, plastic_image, banana_image, coffee_image, glass_image]
 trash_image_index = random.randint(0, len(trash_images)-1)
 
-collect_sound = simplegui.load_sound(sound_data)
-background_music = simplegui.load_sound(background_music_data) #why is it so aggressive (I'm not changing it fr)
+collect_sound = simplegui.load_sound("https://mpur6520.github.io/game_photos_G4C/sound.mp3")
+background_music = simplegui.load_sound("https://mpur6520.github.io/game_photos_G4C/WAAAAAA.mp3") #why is it so aggressive (I'm not changing it fr)
 
 # Text messages
 message = ""
@@ -166,6 +166,9 @@ def keydown_handler(key):
     # Respawn trash circles if all are eaten
     if len(trash_circles) == 0:
         spawn_new_circles()
+        
+        
+
         
 
 # Function to spawn new trash circles
