@@ -1,5 +1,6 @@
 import simplegui
 import random
+import time
 
 # Global variables
 WIDTH = 500
@@ -21,7 +22,7 @@ intro_text_7 = "Don't litter!    [Press [X] to Start Game]"
 
 instructions = True 
 
-time = 60
+timer_value = 60
 
 
 # trash circles - trash
@@ -57,6 +58,16 @@ def calculate_trash_counter():
     return len(trash_circles)
 
         
+def update_timer():
+    global timer_value
+    if timer_value > 0:
+        timer_value -= 1
+        
+def format(t):
+    minutes = t // 60
+    seconds = t % 60
+    return "{:02}:{:02}".format(minutes, seconds)
+    
     
 # Handler to draw everything on the canvas
 def draw(canvas):
@@ -70,12 +81,11 @@ def draw(canvas):
     
     # Draw score counter
     score_text = "Trash Eaten: " + str(trash_counter)
-    canvas.draw_text(score_text, (15, 40), 21, "White", "monospace")
+    canvas.draw_text(score_text, (15, 42), 23, "White", "monospace")
    
 
-    # Draw mastery level
-    mastery_text = "Time: " + str(time)
-    canvas.draw_text(mastery_text, (WIDTH - 100 - frame.get_canvas_textwidth(mastery_text, 20), 40), 21, "White", "monospace")
+    # Draw timer
+    canvas.draw_text("Time Left: " + format(timer_value), (WIDTH - 200 - frame.get_canvas_textwidth(str(timer_value), 20), 42), 23, "White", "monospace")
     
     # Draw trash circles
     for circle in trash_circles:
@@ -119,7 +129,10 @@ def keydown_handler(key):
     global player_pos, trash_counter, mastery_index, player_radius, player_image, instructions, timer
     
     if key == simplegui.KEY_MAP["x"]:  
-        instructions = False
+        if instructions:
+            instructions = False
+            timer.start()
+        
     
     # Move player based on arrow keys
     if key == simplegui.KEY_MAP["w"]:
@@ -176,6 +189,9 @@ def spawn_new_circles():
 frame = simplegui.create_frame("Trash Eating", WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(keydown_handler)
+
+#timerrr
+timer = simplegui.create_timer(1000, update_timer)
 
 # everything is okay (music playing)
 background_music.set_volume(0.2)
