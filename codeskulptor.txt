@@ -9,16 +9,24 @@ player_radius = 50
 player_pos = [WIDTH / 2, HEIGHT / 2 + 100]
 player_speed = 20
 trash_counter = 0
-mastery_levels = ["Dumpster Diner", "Scrap Savant", "Garbage Gourmet", "Junkyard Junkie", "Trash Titan", "Waste Warrior", "Debris Devotee", "Recycling Royalty", "Filth Fiend", "Rummage Ruler", "Litter Legend"]
-mastery_index = 0
+high_score = 0
+
+title = "ECOMUNCHER"
 
 intro_text = "This grassy patch has become very polluted."
 intro_text_2 = "Some bacterium can get rid of trash!" 
 intro_text_3 = "You are now one of them. Use WASD to move."
 intro_text_4 = "Press [Z] to eat trash once you're over it."
 intro_text_5 = "You have 1 minute to clean it up!"
-intro_text_6 = "Trash is bad for our environment."
-intro_text_7 = "Don't litter!    [Press [X] to Start Game]"
+intro_text_7 = "Littering is bad for the environment!"
+intro_text_8 = "Note: Press [R] to reset at any time."
+intro_text_9 = "[Press [X] to Start Game]"
+
+
+game_over_text_1 = "GAME OVER"
+game_over_text_3 = "There's a lot of trash in the real world."
+game_over_text_4 = "Be mindful when you're throwing things out!"
+game_over_text_6 = "Press [R] if you want to reset and try again."
 
 instructions = True 
 
@@ -41,7 +49,7 @@ trash_images = [water_image, plastic_image, banana_image, coffee_image, glass_im
 trash_image_index = random.randint(0, len(trash_images)-1)
 
 collect_sound = simplegui.load_sound("https://mpur6520.github.io/game_photos_G4C/sound.mp3")
-background_music = simplegui.load_sound("https://mpur6520.github.io/game_photos_G4C/WAAAAAA.mp3") #why is it so aggressive (I'm not changing it fr)
+background_music = simplegui.load_sound("https://mpur6520.github.io/game_photos_G4C/music.m4a") #why is it so aggressive (I'm not changing it fr)
 
 # Text messages
 message = ""
@@ -60,8 +68,10 @@ def calculate_trash_counter():
         
 def update_timer():
     global timer_value
-    if timer_value > 0:
+    if timer_value != 0:
         timer_value -= 1
+       
+
         
 def format(t):
     minutes = t // 60
@@ -71,7 +81,7 @@ def format(t):
     
 # Handler to draw everything on the canvas
 def draw(canvas):
-    global message, message_box, message_width, mastery_index, trash_image_index, instructions, time
+    global message, message_box, message_width, mastery_index, trash_image_index, instructions, timer_value, high_score, trash_counter
     
     # Draw background rectangle
     canvas.draw_image(background_image, ((3000 / 2, 3000 / 2)), (3000, 3000), (WIDTH / 2, HEIGHT / 2), (WIDTH, HEIGHT))
@@ -116,17 +126,32 @@ def draw(canvas):
     # draw instructions screen
     if instructions == True:
         canvas.draw_polygon([(20,50),(480,50),(480,450),(20,450)], 3, "White", "Black")
-        canvas.draw_text(intro_text, (40,130), 17, "White", "monospace")
-        canvas.draw_text(intro_text_2, (40,170), 17, "White", "monospace")
-        canvas.draw_text(intro_text_3, (40,210), 17, "White", "monospace")
-        canvas.draw_text(intro_text_4, (40,250), 17, "White", "monospace")
-        canvas.draw_text(intro_text_5, (40,290), 17, "White", "monospace")
-        canvas.draw_text(intro_text_6, (40,330), 17, "White", "monospace")
-        canvas.draw_text(intro_text_7, (40,370), 17, "White", "monospace")
-
+        canvas.draw_text(title, (150,95), 35, "White", "monospace")
+        canvas.draw_text(intro_text, (40,135), 17, "White", "monospace")
+        canvas.draw_text(intro_text_2, (40,175), 17, "White", "monospace")
+        canvas.draw_text(intro_text_3, (40,215), 17, "White", "monospace")
+        canvas.draw_text(intro_text_4, (40,255), 17, "White", "monospace")
+        canvas.draw_text(intro_text_5, (40,295), 17, "White", "monospace")
+        canvas.draw_text(intro_text_7, (40,335), 17, "White", "monospace")
+        canvas.draw_text(intro_text_9, (190,385), 20, "White", "monospace")
+        canvas.draw_text(intro_text_8, (40,435), 14, "White", "monospace")
+        
+        
+    if timer_value <= 0:
+        if trash_counter > high_score:
+            high_score = trash_counter
+        canvas.draw_polygon([(20,50),(480,50),(480,450),(20,450)], 3, "White", "Black")
+        canvas.draw_text(game_over_text_1, (150,130), 40, "White", "monospace")
+        canvas.draw_text("Your score is " + str(trash_counter) + "!", (40,200), 17, "White", "monospace")
+        canvas.draw_text(game_over_text_3, (40,250), 17, "White", "monospace")
+        canvas.draw_text(game_over_text_4, (40,280), 17, "White", "monospace")
+        canvas.draw_text("HIGH SCORE: " + str(high_score), (40,340), 30, "White", "monospace")
+        canvas.draw_text(game_over_text_6, (40,390), 17, "White", "monospace")
+    
+    
 # Handler for keydown events
 def keydown_handler(key):
-    global player_pos, trash_counter, mastery_index, player_radius, player_image, instructions, timer
+    global player_pos, trash_counter, player_radius, player_image, instructions, timer_value, high_score
     
     if key == simplegui.KEY_MAP["x"]:  
         if instructions:
@@ -161,20 +186,19 @@ def keydown_handler(key):
                 trash_circles.remove(circle)
                 # Update trash counter
                 trash_counter += 1
-                # Update mastery level
-                if trash_counter % 10 == 0 and mastery_index < len(mastery_levels) - 1:
-                    if mastery_index <= 10:
-                        mastery_index += 1
+                # Update size
+                if trash_counter % 10 == 0:
                         player_radius = player_radius + 3
-                    else:
-                        mastery_index = 10 
+                        
+    if key == simplegui.KEY_MAP["r"]:
+        timer_value = 60
+        trash_counter = 0
     
     # Respawn trash circles if all are eaten
     if len(trash_circles) == 0:
         spawn_new_circles()
         
         
-
         
 
 # Function to spawn new trash circles
@@ -186,7 +210,7 @@ def spawn_new_circles():
     
     
 # Create frame and register event handlers
-frame = simplegui.create_frame("Trash Eating", WIDTH, HEIGHT)
+frame = simplegui.create_frame("ECOMUNCHER", WIDTH, HEIGHT)
 frame.set_draw_handler(draw)
 frame.set_keydown_handler(keydown_handler)
 
